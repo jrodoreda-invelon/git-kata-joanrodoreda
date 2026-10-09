@@ -278,3 +278,54 @@ Vamos a provocar un conflicto de verdad.
 
 Paso 1 — dos ramas desde el mismo punto, tocando la misma línea:
 
+#Primer he hagut de fer un push per actualitzar BITACORA.md
+`git push`
+Enumerando objetos: 5, listo.
+Contando objetos: 100% (5/5), listo.
+Compresión delta usando hasta 8 hilos
+Comprimiendo objetos: 100% (3/3), listo.
+Escribiendo objetos: 100% (3/3), 2.57 KiB | 2.57 MiB/s, listo.
+Total 3 (delta 1), reusados 0 (delta 0), pack-reusados 0
+remote: Resolving deltas: 100% (1/1), completed with 1 local object.
+To https://github.com/jrodoreda-invelon/git-kata-joanrodoreda.git
+   d28d6ad..d0ff36c  main -> main
+
+
+`git switch main && git pull`
+Ya en 'main'
+Tu rama está actualizada con 'origin/main'.
+Ya está actualizado.
+
+`git switch -c feature/2-postre-tarta`
+Cambiado a nueva rama 'feature/2-postre-tarta'
+# en menu.md: cambia "- Fruta" por "- Tarta de queso"
+
+`git add .
+git commit -am "Change dessert to cheesecake"`
+[feature/2-postre-tarta acab2ff] Change dessert to cheesecake
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+`git push -u origin feature/2-postre-tarta`
+Enumerando objetos: 5, listo.
+Contando objetos: 100% (5/5), listo.
+Compresión delta usando hasta 8 hilos
+Comprimiendo objetos: 100% (3/3), listo.
+Escribiendo objetos: 100% (3/3), 329 bytes | 329.00 KiB/s, listo.
+Total 3 (delta 2), reusados 0 (delta 0), pack-reusados 0
+remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
+remote: 
+remote: Create a pull request for 'feature/2-postre-tarta' on GitHub by visiting:
+remote:      https://github.com/jrodoreda-invelon/git-kata-joanrodoreda/pull/new/feature/2-postre-tarta
+remote: 
+To https://github.com/jrodoreda-invelon/git-kata-joanrodoreda.git
+ * [new branch]      feature/2-postre-tarta -> feature/2-postre-tarta
+rama 'feature/2-postre-tarta' configurada para rastrear 'origin/feature/2-postre-tarta'.
+
+
+`git switch main`
+Cambiado a rama 'main'
+Tu rama está actualizada con 'origin/main'.
+
+`git switch -c feature/3-postre-helado`
+Cambiado a nueva rama 'feature/3-postre-helado'
+# en menu.md: cambia "- Fruta" por "- Helado de vainilla"
