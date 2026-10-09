@@ -170,3 +170,111 @@ que revisar el código no tendrá información de los nuevos cambios y por lo
 tanto el efuerzo tendrá que ser mayor.
 
 ## Misión 4 — PR y merge
+1. Ve a GitHub → Compare & pull request. 
+2. Base main ← Compare feature/1-primeros-platos. 
+3. Título claro + descripción: qué hace y cómo probarlo. 
+4. Mergea el PR desde la web.
+
+Hice primero un push para guardar en el Github los cambios hechos hasta el momento, "Antes de Mision 4".
+Luego se me ha haceptado el PR y se ha creado el merge.
+Entonces he hecho el cambio de rama a main, he hecho el pull y toda la rama main se ha actualizado.
+git switch main
+git pull
+git log --oneline --graph --all
+
+Y aqui podemos observar el arbol de git:
+*   8422ee0 (HEAD -> main, origin/main, origin/HEAD) Merge pull request #1 from jrodoreda-invelon/feature/1-primeros-platos
+|\  
+| * 0682717 (origin/feature/1-primeros-platos, feature/1-primeros-platos) Antes de Mision 4
+| * 7081f8d Add starters section to the daily menu
+|/  
+* 00366e4 Add base menu
+* dbc4172 Initial commit
+
+- ¿Aparece un “commit de merge”? ¿Qué es y por qué existe?
+Sí, es un commit especial automático que se crea al fusionar dos ramas. A diferencia de un commit normal que 
+tiene un solo ancestro, un commit de merge tiene dos padres: el último estado que tenía main y el último estado 
+de tu rama feature/1-primeros-platos. En tu grafo se ve perfectamente representado por el nudo |\ que une ambas líneas.
+
+Por qué existe: Sirve para preservar la historia real del proyecto. Documenta que ese código se desarrolló de 
+forma paralela en una rama aislada y deja constancia del momento exacto en el que esos cambios fueron aprobados 
+(vía Pull Request) e integrados en la línea principal de producción.
+
+
+## Misión 5 — fetch vs pull 
+
+# Paso 1 — toca main desde la web de GitHub.
+He editado el README.md desde la misma web de github.
+Ahora el remoto va por delante de el local.
+
+# Paso 2 — en tu terminal, uno a uno, apuntando qué ves:
+
+`git log --oneline main -1            # (A) tu main local`
+8422ee0 (HEAD -> main, origin/main, origin/HEAD) Merge pull request #1 from jrodoreda-invelon/feature/1-primeros-platos
+
+`git log --oneline origin/main -1     # (B) lo que tú CREES que hay en el remoto`
+8422ee0 (HEAD -> main, origin/main, origin/HEAD) Merge pull request #1 from jrodoreda-invelon/feature/1-primeros-platos
+EXACTAMENT EL MATEIX, llavors s'equivoca perquè hi ha canvis al README.md. El nostre local mira la memòria que té de 
+l'últim cop que s'ha connectat amb el Github (Internet).
+
+`git fetch origin`
+remote: Enumerating objects: 5, done.
+remote: Counting objects: 100% (5/5), done.
+remote: Compressing objects: 100% (3/3), done.
+remote: Total 3 (delta 1), reused 0 (delta 0), pack-reused 0 (from 0)
+Desempaquetando objetos: 100% (3/3), 1.04 KiB | 1.04 MiB/s, listo.
+Desde https://github.com/jrodoreda-invelon/git-kata-joanrodoreda
+   8422ee0..d28d6ad  main       -> origin/main
+
+'(Fetch) La llamada al servidor: Al ejecutar git fetch origin, tu ordenador se conectó a GitHub, vio que había 
+un commit nuevo (d28d6ad), descargó esos datos y actualizó únicamente su caché local (origin/main).'
+
+`git log --oneline main -1            # (C) ¿cambió tu main?`
+8422ee0 (HEAD -> main) Merge pull request #1 from jrodoreda-invelon/feature/1-primeros-platos
+
+`git log --oneline origin/main -1     # (D) ¿cambió origin/main?`
+d28d6ad (origin/main, origin/HEAD) Update README with Mission 5 details
+
+`git status                           # (E) ¿qué te dice ahora?`
+En la rama main
+Tu rama está detrás de 'origin/main' por 1 commit, y puede ser avanzada rápido.
+  (usa "git pull" para actualizar tu rama local)
+
+Cambios no rastreados para el commit:
+  (usa "git add <archivo>..." para actualizar lo que será confirmado)
+  (usa "git restore <archivo>..." para descartar los cambios en el directorio de trabajo)
+        modificados:     BITACORA.md
+
+sin cambios agregados al commit (usa "git add" y/o "git commit -a")
+
+`git pull`
+Actualizando 8422ee0..d28d6ad
+Fast-forward
+ README.md | 2 ++
+ 1 file changed, 2 insertions(+)
+
+`git log --oneline main -1            # (F) ¿y ahora?`
+d28d6ad (HEAD -> main, origin/main, origin/HEAD) Update README with Mission 5 details
+
+- **Respuestas a las preguntas:**
+    1. Después del fetch, ¿cambió tu main? ¿Cambió origin/main?
+  Després del fetch, el teu main local no va canviar. L'origin/main sí que va canviar
+  (es va actualitzar al nou commit de GitHub).
+  
+    2. ¿Qué es exactamente origin/main? ¿Está en tu disco o en GitHub?
+  L'origin/main és una branca de seguiment remot que actua com a memòria cau del servidor. Tot i que
+  representa GitHub, està guardada físicament al teu disc dur local.
+  
+    3. Completa: git pull = git `fetch` + git `merge`
+
+    4. ¿Cuándo usarías fetch solo, sin pull?
+  Utilitzaries només fetch quan vols comprovar de forma segura quins canvis han pujat altres 
+  persones al servidor, sense arriscar-te a modificar els teus fitxers actuals ni provocar conflictes automàtics.
+
+
+## Misión 6 — El conflicto (rebase de verdad)
+
+Vamos a provocar un conflicto de verdad.
+
+Paso 1 — dos ramas desde el mismo punto, tocando la misma línea:
+
