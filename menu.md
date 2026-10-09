@@ -10,5 +10,5 @@
 - Pollo
 
 ## Postre
-- Fruta
+- Tarta de queso
 - Crema de calabaza (vegana)
