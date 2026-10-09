@@ -11,4 +11,5 @@
 
 ## Postre
 - Tarta de queso
+- Helado de vainilla
 - Crema de calabaza (vegana)
