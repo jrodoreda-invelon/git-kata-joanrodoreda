@@ -119,3 +119,54 @@ Si ese commit original ya estaba subido a GitHub (porque hiciste push):
 # están solo en tu ordenador, pero nunca reescribas la historia de commits que ya han sido compartidos (pusheados) al remoto.
 
 ## Misión 3 — squash: la que no hiciste en CMS Jr.
+
+ `git rebase -i main`
+[HEAD desacoplado 7081f8d] Add starters section to the daily menu
+ Date: Fri Oct 9 09:52:29 2026 +0200
+ 3 files changed, 126 insertions(+), 1 deletion(-)
+ create mode 100644 BITACORA.md
+Rebase aplicado satisfactoriamente y actualizado refs/heads/feature/1-primeros-platos.
+# Lo que pasa es que se abre el editor con:
+pick 1a2b3c4 wip
+pick 2b3c4d5 fix
+pick 3c4d5e6 asdf
+pick 4d5e6f7 Add pumpkin cream to starters
+# Y entonces tenemos que cambiar pick por s o squash:
+pick   1a2b3c4 wip
+squash 2b3c4d5 fix
+squash 3c4d5e6 asdf
+squash 4d5e6f7 Add pumpkin cream to starters
+# Una vez guardas(^O) y sales(^X) se abre otro editor donde borramos todo y escribimos:
+Add starters section to the daily menu
+
+Lo que ha pasado no es que hayas "perdido" o eliminado los cambios de tu código, 
+sino que Git ha fusionado (aplastado o squashed) esos 4 commits sucios que tenías 
+(wip, fix, asdf...) en un único commit nuevo y totalmente limpio (7081f8d).
+
+- Pega el git log --oneline de antes y de después.
+
+`git log --oneline` -- ANTES --
+000e696 (HEAD -> feature/1-primeros-platos) Add pumpkin cream to starters
+d09fd3d otra vez
+3872702 fix
+59cb197 wip
+c267fc5 vuelta a inicio
+fff3d2c wip
+00366e4 (origin/main, origin/HEAD, main) Add base menu
+dbc4172 Initial commit
+
+`git log --oneline` -- DESPUÉS --
+00366e4 (origin/main, origin/HEAD, main) Add base menu
+dbc4172 Initial commit
+
+- ¿Cuántos commits quedan? ¿Se perdió algún cambio del fichero?
+Quedan los commits hechos antes del último push, ahora tenemos un único commit 
+para los commits de después haciendolo todo mejor estructurado. 
+Los ficheros siguen idénticos, sin cambios.
+
+- ¿Por qué un revisor prefiere 1 commit claro a 4 commits “wip”?
+Pues evidentemente porque una mala explicación no ayuda en nada, el que tenga 
+que revisar el código no tendrá información de los nuevos cambios y por lo 
+tanto el efuerzo tendrá que ser mayor.
+
+## Misión 4 — PR y merge
