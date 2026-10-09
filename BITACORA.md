@@ -329,18 +329,3 @@ Tu rama está actualizada con 'origin/main'.
 `git switch -c feature/3-postre-helado`
 Cambiado a nueva rama 'feature/3-postre-helado'
 # en menu.md: cambia "- Fruta" por "- Helado de vainilla"
-
-$ git commit -am "Change dessert to vanilla ice cream"
-# He tenido que hacer commit para guardar menu.md para que me apareciese el siguiente Conflicto
-
-## Postre
-<<<<<<< HEAD
-- Tarta de queso
-=======
-- Helado de vainilla
->>>>>>> 9570287 (Change dessert to vanilla ice cream)
-- Crema de calabaza (vegana)
-
-Paso 4 — resuélvelo. Decide qué quieres que quede (puedes dejar los dos postres), borra las tres líneas de marcadores (<<<<<<<, =======, >>>>>>>) y:
-
-git add menu.md
