@@ -276,7 +276,7 @@ d28d6ad (HEAD -> main, origin/main, origin/HEAD) Update README with Mission 5 de
 
 Vamos a provocar un conflicto de verdad.
 
-Paso 1 — dos ramas desde el mismo punto, tocando la misma línea:
+# Paso 1 — dos ramas desde el mismo punto, tocando la misma línea:
 
 #Primer he hagut de fer un push per actualitzar BITACORA.md
 `git push`
@@ -329,3 +329,48 @@ Tu rama está actualizada con 'origin/main'.
 `git switch -c feature/3-postre-helado`
 Cambiado a nueva rama 'feature/3-postre-helado'
 # en menu.md: cambia "- Fruta" por "- Helado de vainilla"
+<<<<<<< HEAD
+=======
+
+`git commit -am "Change dessert to vanilla ice cream"`
+======= ¿Qué es exactamente -am?
+Hasta ahora habías usado git commit -m "mensaje", que requiere que primero hagas manualmente un git add archivo para meter los cambios en el staging area.
+
+La bandera -am es simplemente un atajo que combina dos opciones (-a y -m):
+
+-a (de all): Le dice a Git "haz un add automático a todos los archivos que ya estás rastreando y que he modificado".
+
+-m (de message): Te permite escribir el mensaje del commit.
+
+Básicamente, git commit -am "..." te ahorra escribir el git add previo en una línea separada.
+(⚠️ Ojo: Solo sirve para archivos que ya existían en el repositorio y has modificado. Si creas un archivo totalmente nuevo, el -a no lo detecta y tendrás que hacer el git add a mano).
+
+# Paso 2 — mergea SOLO la rama de la tarta (PR en GitHub → merge).
+
+Fet
+
+# Paso 3 — ahora actualiza la rama del helado sobre el nuevo main:
+
+`git switch feature/3-postre-helado`
+M       BITACORA.md
+Ya en 'feature/3-postre-helado'
+Tu rama está adelantada a 'origin/feature/3-postre-helado' por 1 commit.
+  (usa "git push" para publicar tus commits locales)
+
+`git fetch origin`
+remote: Enumerating objects: 1, done.
+remote: Counting objects: 100% (1/1), done.
+remote: Total 1 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+Desempaquetando objetos: 100% (1/1), 916 bytes | 916.00 KiB/s, listo.
+Desde https://github.com/jrodoreda-invelon/git-kata-joanrodoreda
+   d0ff36c..707f78e  main       -> origin/main
+
+`git rebase origin/main`
+error: no se puede rebase: Tienes cambios sin marcar.
+error: Por favor, confírmalos o guárdalos.
+
+# Paso 4 — resuélvelo. Decide qué quieres que quede (puedes dejar los dos postres), borra las tres líneas de marcadores (<<<<<<<, =======, >>>>>>>) y:
+
+$ git commit -am "Change dessert to vanilla ice cream"
+# He tenido que hacer commit para guardar menu.md para que me apareciese el siguiente Conflicto
+
