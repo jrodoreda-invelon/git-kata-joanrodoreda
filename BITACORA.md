@@ -820,3 +820,28 @@ git tag -a v1.0.0 -m "Git kata completed"
 git push origin v1.0.0
 
 `GitHub → Releases → Draft a new release → tag v1.0.0 → notas.`
+
+-- Respuestas a las preguntas --
+- `git tag v1.0.0 vs git tag -a v1.0.0 -m "..." (Ligero vs Anotado):`
+  - Un tag ligero (git tag v1.0.0) es simplemente un puntero estático a un commit específico.
+  - Un tag anotado (git tag -a ... -m "...") crea un objeto completo en la base de datos de Git que almacena metadatos 
+    adicionales (autor, fecha, mensaje descriptivo y opcionalmente firma digital), por lo que es el estándar recomendado 
+    para versiones oficiales (releases).
+  # Un ejemplo es:
+  - git tag -a v1.0.0 -m "Versión estable del Git Kata completada con éxito"
+
+- `¿Por qué un tag y no el nombre de la rama para marcar una versión?`
+  - Porque las ramas son dinámicas y sus punteros se mueven constantemente a medida que sigues añadiendo commits. Un 
+    tag actúa como un marcador estático e inmutable en el tiempo que congela un commit exacto como versión definitiva.
+
+- `SemVer: has arreglado un bug → ¿v1.0.1, v1.1.0 o v2.0.0?`
+  - SemVer significa Versionado Semántico
+  - Sigue siempre esta estructura numérica: MAJOR.MINOR.PATCH (Mayor.Menor.Parche). Cada número cambia según el tipo
+    de modificación que hagas en tu código:
+    1. MAJOR (El primer número - Ej: v2.0.0): Lo cambias cuando haces cambios gigantes que rompen la compatibilidad con
+       versiones anteriores (por ejemplo, cambias la estructura de la base de datos o eliminas funciones antiguas que 
+       tus usuarios usaban). Si alguien actualiza, se le puede romper el programa. 
+    2. MINOR (El número del medio - Ej: v1.1.0): Lo cambias cuando añades nuevas funcionalidades pero de forma 
+       retrocompatible (es decir, el programa hace cosas nuevas, pero lo viejo sigue funcionando igual sin romperse). 
+    3. PATCH (El último número - Ej: v1.0.1): Lo cambias exclusivamente cuando corriges un error, fallo o bug, sin 
+       añadir nada nuevo ni romper nada.
