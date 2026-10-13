@@ -374,3 +374,76 @@ error: Por favor, confírmalos o guárdalos.
 $ git commit -am "Change dessert to vanilla ice cream"
 # He tenido que hacer commit para guardar menu.md para que me apareciese el siguiente Conflicto
 
+git add menu.md
+git rebase --continue
+git push --force-with-lease
+
+¿Qué significa HEAD en el conflicto? ¿Tu cambio o el de main? (⚠️ en un rebase no es lo que crees)
+- En un rebase, la perspectiva se invierte. HEAD es la rama base sobre la que te estás aplicando (en este caso, main 
+  con la tarta de queso), mientras que tus propios cambios (el helado) son los que intentan inyectars.
+¿Por qué el push normal falló y necesitó --force-with-lease?
+- Porque al hacer rebase reescribiste la historia de tu rama local. Como los commits cambiaron,
+  Git bloquea un push normal para evitar que sobrescribas el servidor por accidente.
+¿Qué diferencia hay entre --force y --force-with-lease? ¿Por qué usamos el segundo?
+- --force sobrescribe el servidor ciegamente y puede borrar el trabajo de otros. --force-with-lease es un seguro de 
+  vida: antes de sobrescribir, comprueba que nadie más haya modificado esa rama remota mientras tú arreglabas el conflicto.
+Si te hubieras arrepentido a mitad del rebase, ¿cómo lo cancelas? (pista: git rebase --?????)
+- Usando el comando `git rebase --abort`.
+
+## Misión 7 — merge vs rebase, visto en el grafo
+
+`$ git log --oneline --graph --all`
+* 285f733 (HEAD -> feature/3-postre-helado, origin/feature/3-postre-helado) Actualizar notas en la bitácora
+* 1988faa Change dessert to vanilla ice cream
+* 55b3672 Change dessert to vanilla ice cream
+* 6cbbe1e Change dessert to vanilla ice cream
+*   707f78e (origin/main, origin/HEAD) Merge pull request #2 from jrodoreda-invelon/feature/2-postre-tarta
+|\  
+| * acab2ff (origin/feature/2-postre-tarta, feature/2-postre-tarta) Change dessert to cheesecake
+|/  
+* d0ff36c (main) Guardamos BITACORA.md
+* d28d6ad Update README with Mission 5 details
+*   8422ee0 Merge pull request #1 from jrodoreda-invelon/feature/1-primeros-platos
+|\  
+| * 0682717 (origin/feature/1-primeros-platos, feature/1-primeros-platos) Antes de Mision 4
+| * 7081f8d Add starters section to the daily menu
+|/  
+* 00366e4 Add base menu
+* dbc4172 Initial commit
+
+# Dibuja (o pega) el grafo. ¿Qué forma tiene la historia de la rama que mergeaste y cuál la de la que rebaseaste?
+Rama con Merge (Tarta): Deja una estructura de bucle o bifurcación con un nudo de unión (|\ y |/). El commit de merge 
+actúa como un puente que conecta las dos historias paralelas, preservando la cronología real de cuándo 
+se desvió y se unió el código.
+
+Rama con Rebase (Helado): Deja una línea completamente recta y secuencial. El rebase "reubica" tus cambios desde la 
+base antigua hasta la punta actual de main, reescribiendo la historia para que parezca que siempre se trabajó de 
+forma lineal y ordenada.
+
+#  La regla de oro corporativa (¿Por qué este orden?)
+Rebase para actualizarte tú de manera local: Te permite limpiar tu historial y ponerte al día con respecto a los 
+cambios de tus compis sin ensucian el grafo con merges inútiles de sincronización.
+
+Merge (vía PR) para integrar a producción (main): Deja constancia oficial, trazable y sujeta a revisión en el 
+servidor de que esa funcionalidad ha sido validada y aprobada para entrar en el tronco principal.
+
+# Regla de la casa: rebase para actualizar tu rama, merge (vía PR) para integrar a main. ¿Por qué en ese orden?
+
+Porque combinamos lo mejor de ambos mundos:
+
+- Usas rebase de forma local en tu rama de trabajo para ponerte al día con respecto a main de forma limpia y sin 
+desordenar el grafo con merges innecesarios.
+
+- Usas merge (vía PR) en el servidor para integrar tus cambios en main, lo que deja una traza oficial, auditable 
+y aprobada de que esa funcionalidad ha entrado a producción.
+
+# ¿Por qué NUNCA debes hacer rebase de una rama que comparten otras personas?
+
+Porque el rebase reescribe la historia y cambia los hashes (identificadores) de los commits. Si haces rebase de una 
+rama compartida (como una feature branch donde trabaja otro compañero), su ordenador y el servidor se quedarán 
+desincronizados con una historia inventada y divergente, destruyendo su trabajo y obligándole a hacer malabares 
+técnicos para recuperar sus cambios. El rebase solo se tolera en ramas estrictamente personales y locales.
+
+## Misión 8 — Deshacer (revert, reset, reflog)
+
+Primero, crea una rama limpia para hacer las pruebas:
